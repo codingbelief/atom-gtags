@@ -1,0 +1,30 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle gtags'
+      'command': 'atom-gtags:toggle'
+    }
+  ]
+
+  # provide 'Update Gtags' command on the root directorys' context menu
+  '.tree-view.full-menu .project-root > .header':
+    [
+      {label: 'Build GTags ', command:  'atom-gtags:build-tags'},
+      {label: 'Update GTags ', command:  'atom-gtags:update-tags'},
+      {type: 'separator'}
+    ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'atom-gtags'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'atom-gtags:toggle'
+        }
+      ]
+    ]
+  }
+]

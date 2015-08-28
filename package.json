@@ -1,0 +1,38 @@
+{
+  "name": "atom-gtags",
+  "main": "./lib/main",
+  "version": "0.1.0",
+  "description": "Atom gtags",
+  "keywords": [
+  ],
+  "activationCommands": {
+    "atom-workspace": [
+      "atom-gtags:toggle",
+      "atom-gtags:update-tags",
+      "atom-gtags:build-tags"
+     ]
+  },
+  "repository": "https://github.com/codingbelief/gtags",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "2.0.0",
+    "fuzzaldrin": "^2.1"
+  },
+  "providedServices": {
+    "autocomplete.provider": {
+      "versions": {
+        "2.0.0": "provide"
+      }
+    }
+  },
+  "consumedServices": {
+    "status-bar": {
+      "versions": {
+        "^1.0.0": "consumeStatusBar"
+      }
+    }
+  }
+}
