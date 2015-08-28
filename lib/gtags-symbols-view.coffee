@@ -59,6 +59,7 @@ class GtagsSymbolsView extends SelectListView
   cancel: ->
     @panel.hide()
     @setItems("")
+    GtagsFiles.clear()
     #console.log("cancel")
     super
 
