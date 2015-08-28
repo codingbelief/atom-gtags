@@ -9,7 +9,11 @@
     "atom-workspace": [
       "atom-gtags:toggle",
       "atom-gtags:update-tags",
-      "atom-gtags:build-tags"
+      "atom-gtags:build-tags",
+      "atom-gtags:get-definitions",
+      "atom-gtags:get-references",
+      "atom-gtags:get-symbols-of-file",
+      "atom-gtags:lookup-definitions"
      ]
   },
   "repository": "https://github.com/codingbelief/gtags",
