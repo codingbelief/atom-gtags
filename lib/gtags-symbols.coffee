@@ -141,11 +141,11 @@ class GtagsSymbols
       #console.log "exit, ret:#{code}"
       if code is 0
         atom.notifications.addInfo "[Gtags] Update Tags Files Completed!",
-          detail: "Status: #{code}"
+          # detail: "Status: #{code}"
           dismissable: true
       else
         atom.notifications.addError "[Gtags] Update Tags Files Failed!",
-          detail: "Status: #{code}"
+          # detail: "Status: #{code}"
           dismissable: true
 
   getPackageRoot: ->
