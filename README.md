@@ -3,6 +3,10 @@
 Gtags for Atom  
 This package uses [GNU GLOBAL](http://www.gnu.org/software/global/)
 
+![](./atom-gtags-build.png)
+
+![](./atom-gtags-symbol.png)
+
 # Usage
 
 1. Build gtags database (GTAGS, GPATH and GRTAGS) by `Build Gtags` context menu command of project root folders
