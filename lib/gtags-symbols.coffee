@@ -22,8 +22,12 @@ class GtagsSymbols
     console.log atom.project.getPaths()
     if PathToGtags is ""
       packageRoot  = @getPackageRoot()
-      PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-#{process.platform}-#{process.arch}")
-      PathToGlobal = Path.join(packageRoot, 'vendor', "global-#{process.platform}-#{process.arch}")
+      if process.platform is "win32"
+        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags.exe")
+        PathToGlobal = Path.join(packageRoot, 'vendor', "global.exe")
+      else
+        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-#{process.platform}-#{process.arch}")
+        PathToGlobal = Path.join(packageRoot, 'vendor', "global-#{process.platform}-#{process.arch}")
       BuildCmdByOptions["--update"] = PathToGlobal
       BuildCmdByOptions["--sqlite3"] = PathToGtags
       #PathToGtags = "/usr/local/bin/gtags"
@@ -102,7 +106,7 @@ class GtagsSymbols
     re = /([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+(.*)/
     for symbol in symbols
       s = re.exec(symbol)
-      result.push({"symbol":s[1], "line":s[2], "path":s[3], "signature":s[4]})
+      result.push({"symbol":s[1], "line":s[2], "path":Path.normalize(s[3]), "signature":s[4]})
 
     result.splice 0,0,
       "options":"#{options}"
