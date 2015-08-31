@@ -2,8 +2,12 @@
   "name": "atom-gtags",
   "main": "./lib/main",
   "version": "0.1.0",
-  "description": "Atom gtags",
+  "description": "Atom Gtags",
   "keywords": [
+    "gtags",
+    "ctags",
+    "tags",
+    "global"
   ],
   "activationCommands": {
     "atom-workspace": [
@@ -16,7 +20,7 @@
       "atom-gtags:lookup-definitions"
      ]
   },
-  "repository": "https://github.com/codingbelief/gtags",
+  "repository": "https://github.com/codingbelief/atom-gtags",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
