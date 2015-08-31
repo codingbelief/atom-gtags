@@ -25,6 +25,9 @@ class GtagsSymbols
       if process.platform is "win32"
         PathToGtags  = Path.join(packageRoot, 'vendor', "gtags.exe")
         PathToGlobal = Path.join(packageRoot, 'vendor', "global.exe")
+      else if process.platform is "linux"
+        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-linux")
+        PathToGlobal = Path.join(packageRoot, 'vendor', "global-linux")
       else
         PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-#{process.platform}-#{process.arch}")
         PathToGlobal = Path.join(packageRoot, 'vendor', "global-#{process.platform}-#{process.arch}")
