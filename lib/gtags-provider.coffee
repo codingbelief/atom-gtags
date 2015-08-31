@@ -2,7 +2,7 @@ GtagsSymbols = require './gtags-symbols'
 {filter} = require 'fuzzaldrin'
 module.exports =
 class GtagsProvider
-  selector: '.source.c'
+  selector: '.source.c, .source.cpp, .source.java'
   disableForSelector: '.comment, .string'
   inclusionPriority: 100
   #suggestionPriority: 2
