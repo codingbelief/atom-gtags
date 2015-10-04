@@ -46,6 +46,11 @@ class GtagsSymbols
     return @_gtagsCommand("-axf", path, Path.dirname(path))
 
   singleFileUpdate: (path) ->
+    {symbols, status} = @_gtagsCommand("-p", "", Path.dirname(path))
+    if status["error"]?
+      console.log "can not get GTAGS path"
+      return {'symbols': {}, 'status': {}}
+
     type = Path.extname(path)
     if type in [".h",".c",".cpp",".java"]
       return @_gtagsCommand("--single-update", path, Path.dirname(path))
@@ -97,13 +102,17 @@ class GtagsSymbols
 
     spawnSync  = require("child_process").spawnSync
     console.log "execute global, opt: #{options}, arg: #{arg}, cwd: #{cwd}, lib: #{envLib}"
-    global = spawnSync(PathToGlobal, [options, arg], {cwd:cwd, env:{"GTAGSLIBPATH":envLib}})
+    if arg is ""
+      opt = [options]
+    else
+      opt = [options, arg]
+    global = spawnSync(PathToGlobal, opt, {cwd:cwd, env:{"GTAGSLIBPATH":envLib}})
     # console.log global
     if global.error?
       status = {'error': {'title': "[Gtags] global not found", 'detail': global.error.toString()}}
       return {'symbols': [], 'status': status}
 
-    if global.stdout.length is 0
+    if global.stdout.length is 0 or arg is ""
       status = @_gtagsStatus(options, arg, global)
       return {'symbols': [], 'status': status}
 
