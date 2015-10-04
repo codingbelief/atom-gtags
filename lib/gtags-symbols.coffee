@@ -46,7 +46,12 @@ class GtagsSymbols
     return @_gtagsCommand("-axf", path, Path.dirname(path))
 
   singleFileUpdate: (path) ->
-    return @_gtagsCommand("--single-update", path, Path.dirname(path))
+    type = Path.extname(path)
+    if type in [".h",".c",".cpp",".java"]
+      return @_gtagsCommand("--single-update", path, Path.dirname(path))
+    else
+      console.log "unsupport file type #{type}"
+      return {'symbols': {}, 'status': {}}
 
   getCompletions: (prefix) ->
     return @_gtagsCommand("-axc", prefix)
