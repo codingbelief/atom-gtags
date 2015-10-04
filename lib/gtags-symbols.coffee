@@ -136,7 +136,7 @@ class GtagsSymbols
     console.log "buildtags, arg: #{arg}, path: #{path}"
     cmdPath = BuildCmdByOptions[options]
     spawn = require("child_process").spawn
-    cmd = spawn(cmdPath, [cmdOpt], {cwd:path})
+    cmd = spawn(cmdPath, ["--skip-unreadable", cmdOpt], {cwd:path})
 
     cmd.stdout.on 'data', (data) ->
       console.log data.toString()
