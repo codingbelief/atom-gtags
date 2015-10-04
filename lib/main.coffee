@@ -217,6 +217,4 @@ module.exports = AtomGtags =
     toggleCallback = =>
       @gtagsNotifications.dismiss()
     @scheduleTimeout = setTimeout(toggleCallback,  1000)
-    test = "1234 231"
-    test1 = test.replace(/\ /g, "\\ ")
-    console.log test1
+    @gtagsSymbols.version()

@@ -57,6 +57,9 @@ class GtagsSymbols
   updateTags: (path, onCompleted=null) ->
     return @_buildTags("update", path, onCompleted)
 
+  version: () ->
+    return @_version()
+
   # private
   _gtagsStatus: (options, arg, exec)->
     if exec.status is 0
@@ -162,3 +165,16 @@ class GtagsSymbols
       if packageRoot.indexOf(resourcePath) is 0
         packageRoot = Path.join("#{resourcePath}.unpacked", 'node_modules', 'gtags')
     packageRoot
+
+  _version: () ->
+    options = "--sqlite3"
+    cmdOpt = "--version"
+    cmdPath = BuildCmdByOptions[options]
+    spawn = require("child_process").spawn
+    cmd = spawn(cmdPath, [cmdOpt])
+
+    cmd.stdout.on 'data', (data) ->
+      console.log data.toString()
+
+    cmd.stderr.on 'data', (data) ->
+      console.log data.toString()
