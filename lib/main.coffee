@@ -40,6 +40,8 @@ module.exports = AtomGtags =
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:get-symbols-of-file': => @getSymbolsOfFile()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:nav-forward': => @navForward()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:nav-back': => @navBack()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:pre-position': => @prePosition()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:next-position': => @nextPosition()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:build-tags': => @buildTags()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:update-tags': => @updateTags()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-gtags:toggle': (event) => @toggle(event)
@@ -56,6 +58,23 @@ module.exports = AtomGtags =
   _editorGiven: (editor) ->
     @subscriptions.add editor.onDidSave =>
       @autoUpdateTags(editor.getPath())
+    @subscriptions.add editor.onDidChangeCursorPosition =>
+      @addPosition(event)
+
+  addPosition: (event) ->
+    if textEditor = atom.workspace.getActiveTextEditor()
+      # add pre path
+      path = textEditor.getPath()
+      position = textEditor.getCursorBufferPosition()
+      GtagsNavigation.add(path, position, "")
+
+  prePosition: ->
+    # console.log 'Gtags navForward'
+    GtagsNavigation.prePosition()
+
+  nextPosition: ->
+    # console.log 'Gtags navBack'
+    GtagsNavigation.nextPosition()
 
   provide: ->
     unless @provider?

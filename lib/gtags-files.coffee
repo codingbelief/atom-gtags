@@ -44,7 +44,8 @@ class GtagsFiles
 
     if textEditor = atom.workspace.getActiveTextEditor()
       position = new Point(lineNumber-1)
-      textEditor.scrollToBufferPosition(position, center: true)
       textEditor.setCursorBufferPosition(position)
-      #textEditor.scrollToCursorPosition(center: true)
-      textEditor.moveToFirstCharacterOfLine()
+      textEditor.scrollToBufferPosition(position, center: true)
+      #textEditor.scrollToScreenPosition(position, center: true)
+      #textEditor.scrollToCursorPosition()
+      #textEditor.moveToFirstCharacterOfLine()

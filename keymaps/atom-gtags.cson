@@ -15,4 +15,6 @@
   'alt-i': 'atom-gtags:single-file-update'
   'alt-w': 'atom-gtags:nav-forward'
   'alt-q': 'atom-gtags:nav-back'
+  'alt-.': 'atom-gtags:pre-position'
+  'alt-,': 'atom-gtags:next-position'
   'ctrl-alt-g': 'atom-gtags:toggle'

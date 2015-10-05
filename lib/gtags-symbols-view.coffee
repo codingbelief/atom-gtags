@@ -16,6 +16,7 @@ class GtagsSymbolsView extends SelectListView
     @prePosition = null
 
   viewForItem: (item) ->
+    GtagsNavigation.lock()
     if item['filterKey']?
       @filterKey = item['filterKey']
 
@@ -38,6 +39,7 @@ class GtagsSymbolsView extends SelectListView
       console.log "===>>> title selected"
     else
       console.log("===>>> #{item['path']}:#{item['line']} was selected")
+      GtagsNavigation.unlock()
       GtagsNavigation.add(@prePath, @prePosition['row'] + 1, "")
       GtagsNavigation.add(item['path'], item['line'], "")
       GtagsFiles.open(item['path'], item['line'], 1)
@@ -80,10 +82,10 @@ class GtagsSymbolsView extends SelectListView
 
     if textEditor = atom.workspace.getActiveTextEditor()
       position = new Point(lineNumber-1)
-      textEditor.scrollToBufferPosition(position, center: true)
       textEditor.setCursorBufferPosition(position)
+      textEditor.scrollToBufferPosition(position, center: true)
       #textEditor.scrollToCursorPosition(center: true)
-      textEditor.moveToFirstCharacterOfLine()
+      #textEditor.moveToFirstCharacterOfLine()
 
   show: ->
     @panel.show()
