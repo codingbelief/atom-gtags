@@ -3,6 +3,7 @@ GtagsFiles = require './gtags-files'
 GtagsNavigation = require './gtags-navigation'
 {$$, SelectListView} = require 'atom-space-pen-views'
 {Point} = require 'atom'
+Path = require 'path'
 
 module.exports =
 class GtagsSymbolsView extends SelectListView
@@ -27,7 +28,7 @@ class GtagsSymbolsView extends SelectListView
           @div "Project: #{item['project']}", class: 'secondary-line'
         else
           @div "#{item['signature']}", class: 'primary-line'
-          @div "#{item['path']}: #{item['line']}", class: 'secondary-line'
+          @div "#{Path.basename(item['path'])} @ #{item['path']}: #{item['line']}", class: 'secondary-line'
 
   getFilterKey: ->
     # console.log "getFilterKey: #{@filterKey}"
