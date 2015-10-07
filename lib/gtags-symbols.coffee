@@ -1,6 +1,6 @@
 
 Path = require 'path'
-
+fs = require 'fs'
 PathToGtags = ""
 PathToGlobal = ""
 
@@ -37,7 +37,7 @@ class GtagsSymbols
       #PathToGlobal = "/usr/local/bin/global"
   # Public
   getDefinitions: (symbolName, symbolFile="") ->
-    return @_gtagsCommand("-ax", symbolName, Path.dirname(symbolFile))
+    return @gtagsCommand("-ax", symbolName)
 
   getReferences: (symbolName, symbolFile="") ->
     return @_gtagsCommand("-axr", symbolName, Path.dirname(symbolFile))
@@ -59,7 +59,7 @@ class GtagsSymbols
       return {'symbols': {}, 'status': {}}
 
   getCompletions: (prefix) ->
-    return @_gtagsCommand("-axc", prefix)
+    return @gtagsCommand("-axc", prefix)
 
   buildTags: (path, onCompleted=null) ->
     return @_buildTags("build", path, onCompleted)
@@ -83,30 +83,40 @@ class GtagsSymbols
       else
         return {'error': {'title': "[Gtags] global exec failed", 'detail': "#{exec.stderr}"}}
 
+  hasTagsFile: (path) ->
+    gtagsPath = Path.normalize(path+"/GTAGS")
+    try
+      return fs.statSync(gtagsPath)?.isFile()
+    catch error
+      return false
+
+  gtagsCommand: (options, arg) ->
+    syms = []
+    stas = {}
+    paths = atom.project.getPaths()
+    for path in paths
+      if @hasTagsFile(path)
+        {symbols, status} = @_gtagsCommand(options, arg, path)
+        if symbols?.length > 0
+          syms.push(symbols...)
+          stas = status
+          console.log symbols
+          console.log syms
+    if syms?.length is 0
+      stas = status
+    return {'symbols': syms, 'status': stas}
+
   _gtagsCommand: (options, arg, cwd="") ->
     console.log "gtagsCommand, options: #{options}, arg: #{arg}, cwd: #{cwd}"
     result = []
 
-    paths = atom.project.getPaths()
-    envLib = ""
-
-    if cwd is ""
-      cwd = paths[0]
-
-    for path in paths
-      if cwd.indexOf(path) > -1
-        cwd = path
-      else
-        envLib = Path.join(envLib, Path.delimiter, path)
-    envLib = envLib.substr(1)
-
     spawnSync  = require("child_process").spawnSync
-    console.log "execute global, opt: #{options}, arg: #{arg}, cwd: #{cwd}, lib: #{envLib}"
+    console.log "execute global, opt: #{options}, arg: #{arg}, cwd: #{cwd}"
     if arg is ""
       opt = [options]
     else
       opt = [options, arg]
-    global = spawnSync(PathToGlobal, opt, {cwd:cwd, env:{"GTAGSLIBPATH":envLib}})
+    global = spawnSync(PathToGlobal, opt, {cwd:cwd})
     # console.log global
     if global.error?
       status = {'error': {'title': "[Gtags] global not found", 'detail': global.error.toString()}}
