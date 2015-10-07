@@ -19,7 +19,7 @@ module.exports = AtomGtags =
 
     enableGtagsAutocomplete:
       type: 'boolean'
-      default: false
+      default: true
 
   provider: null
   gtagsListView: null

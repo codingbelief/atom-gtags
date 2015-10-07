@@ -11,17 +11,13 @@ class GtagsProvider
   @preSuggestions: []
 
   getSuggestions: ({scopeDescriptor, prefix}) ->
-    return unless atom.config.get('atom-gtags.autoUpdateTagsOnFileSaved')
+    return unless atom.config.get('atom-gtags.enableGtagsAutocomplete')
     #console.log scopeDescriptor
-    if prefix?.length < 3
-      return []
-
-    if prefix?.length is 3
-      if GtagsProvider.prePrefix not in [prefix]
-        GtagsProvider.prePrefix = prefix
-        GtagsProvider.preSuggestions = @_getSuggestions(prefix)
-
-    return filter(GtagsProvider.preSuggestions, prefix, key: 'text')
+    return new Promise (resolve) =>
+      suggestion = []
+      if prefix?.length >= 3
+        suggestion = @_getSuggestions(prefix)
+      resolve(suggestion)
 
   _getSuggestions: (prefix) ->
     suggestions = []
