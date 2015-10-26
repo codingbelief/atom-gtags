@@ -149,18 +149,18 @@ class GtagsSymbols
   _buildTags: (arg, path, onCompleted) ->
     if arg is "update"
       options = "--update"
-      cmdOpt = "--update"
+      cmdOpt = ["--update"]
     else
       options = "--sqlite3"
-      cmdOpt = "--sqlite3"
+      cmdOpt = ["--skip-unreadable", "--sqlite3"]
       if not atom.config.get('atom-gtags.useSqlite3Format')
         console.log "Using BSD/DB Format"
-        cmdOpt = "--quiet"
+        cmdOpt = ["--quiet"]
 
     console.log "buildtags, arg: #{arg}, path: #{path}"
     cmdPath = BuildCmdByOptions[options]
     spawn = require("child_process").spawn
-    cmd = spawn(cmdPath, ["--skip-unreadable", cmdOpt], {cwd:path})
+    cmd = spawn(cmdPath, cmdOpt, {cwd:path})
 
     cmd.stdout.on 'data', (data) ->
       console.log data.toString()
