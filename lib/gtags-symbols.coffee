@@ -93,6 +93,7 @@ class GtagsSymbols
   gtagsCommand: (options, arg) ->
     syms = []
     stas = {}
+    status = {}
     paths = atom.project.getPaths()
     for path in paths
       if @hasTagsFile(path)
