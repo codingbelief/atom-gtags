@@ -3,9 +3,9 @@
 Gtags for Atom  
 This package uses [GNU GLOBAL](http://www.gnu.org/software/global/)
 
-![](./atom-gtags-build.png)
+![atom-gtags-build](https://raw.githubusercontent.com/codingbelief/atom-gtags/master/atom-gtags-build.png)
 
-![](./atom-gtags-symbol.png)
+![atom-gtags-symbol](https://raw.githubusercontent.com/codingbelief/atom-gtags/master/atom-gtags-symbol.png)
 
 # Usage
 
