@@ -1,7 +1,7 @@
 {
   "name": "atom-gtags",
   "main": "./lib/main",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Atom Gtags",
   "keywords": [
     "gtags",
@@ -18,7 +18,7 @@
       "atom-gtags:get-references",
       "atom-gtags:get-symbols-of-file",
       "atom-gtags:lookup-definitions"
-     ]
+    ]
   },
   "repository": "https://github.com/codingbelief/atom-gtags",
   "license": "MIT",
