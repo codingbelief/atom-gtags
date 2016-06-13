@@ -148,6 +148,8 @@ class GtagsNavigation
       #textEditor.setCursorBufferPosition(position)
       #textEditor.scrollToCursorPosition(center: true)
       textEditor.scrollToBufferPosition(position, {center: true})
+      textEditor.setCursorBufferPosition(position)
+      console.log "setCursorBufferPosition"
       if id is 3
         textEditor.setCursorBufferPosition(position)
       else
