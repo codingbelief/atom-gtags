@@ -3,6 +3,7 @@ Path = require 'path'
 fs = require 'fs'
 PathToGtags = ""
 PathToGlobal = ""
+PathEnv = ""
 
 BuildCmdByOptions = {}
 
@@ -16,25 +17,16 @@ FilterKeyByOptions =
 module.exports =
 class GtagsSymbols
   constructor: (serializedState) ->
-    #@cwd = "/Users/Rock/code/linux/digging"
-    @cwd = "/code/m81/m81_tmp/kernel/mediatek/kernel-3.10"
-    #@cwd = atom.project.getPaths()[0]
+    @cwd = ""
     console.log atom.project.getPaths()
     if PathToGtags is ""
       packageRoot  = @getPackageRoot()
-      if process.platform is "win32"
-        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags.exe")
-        PathToGlobal = Path.join(packageRoot, 'vendor', "global.exe")
-      else if process.platform is "linux"
-        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-linux")
-        PathToGlobal = Path.join(packageRoot, 'vendor', "global-linux")
-      else
-        PathToGtags  = Path.join(packageRoot, 'vendor', "gtags-#{process.platform}-#{process.arch}")
-        PathToGlobal = Path.join(packageRoot, 'vendor', "global-#{process.platform}-#{process.arch}")
+      PathToGtags  = Path.join(packageRoot, 'vendor', "#{process.platform}", "gtags")
+      PathToGlobal = Path.join(packageRoot, 'vendor', "#{process.platform}", "global")
+      PathEnv = Path.join(packageRoot, 'vendor', "#{process.platform}")
       BuildCmdByOptions["--update"] = PathToGlobal
       BuildCmdByOptions["--sqlite3"] = PathToGtags
-      #PathToGtags = "/usr/local/bin/gtags"
-      #PathToGlobal = "/usr/local/bin/global"
+
   # Public
   getDefinitions: (symbolName, symbolFile="") ->
     return @gtagsCommand("-ax", symbolName)
@@ -117,7 +109,10 @@ class GtagsSymbols
       opt = [options]
     else
       opt = [options, arg]
-    global = spawnSync(PathToGlobal, opt, {cwd:cwd})
+
+    gtagsEnv = process.env
+    gtagsEnv['PATH'] = PathEnv
+    global = spawnSync(PathToGlobal, opt, {cwd:cwd, env:gtagsEnv})
     # console.log global
     if global.error?
       status = {'error': {'title': "[Gtags] global not found", 'detail': global.error.toString()}}
@@ -161,7 +156,10 @@ class GtagsSymbols
     console.log "buildtags, arg: #{arg}, path: #{path}"
     cmdPath = BuildCmdByOptions[options]
     spawn = require("child_process").spawn
-    cmd = spawn(cmdPath, cmdOpt, {cwd:path})
+
+    gtagsEnv = process.env
+    gtagsEnv['PATH'] = PathEnv
+    cmd = spawn(cmdPath, cmdOpt, {cwd:path, env:gtagsEnv})
 
     cmd.stdout.on 'data', (data) ->
       console.log data.toString()
