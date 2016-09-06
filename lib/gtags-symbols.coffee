@@ -3,7 +3,7 @@ Path = require 'path'
 fs = require 'fs'
 PathToGtags = ""
 PathToGlobal = ""
-PathEnv = ""
+GtagsEnv = null
 
 BuildCmdByOptions = {}
 
@@ -23,7 +23,8 @@ class GtagsSymbols
       packageRoot  = @getPackageRoot()
       PathToGtags  = Path.join(packageRoot, 'vendor', "#{process.platform}", "gtags")
       PathToGlobal = Path.join(packageRoot, 'vendor', "#{process.platform}", "global")
-      PathEnv = Path.join(packageRoot, 'vendor', "#{process.platform}")
+      GtagsEnv = @clone(process.env)
+      GtagsEnv['PATH'] = Path.join(packageRoot, 'vendor', "#{process.platform}")
       BuildCmdByOptions["--update"] = PathToGlobal
       BuildCmdByOptions["--sqlite3"] = PathToGtags
 
@@ -110,9 +111,7 @@ class GtagsSymbols
     else
       opt = [options, arg]
 
-    gtagsEnv = process.env
-    gtagsEnv['PATH'] = PathEnv
-    global = spawnSync(PathToGlobal, opt, {cwd:cwd, env:gtagsEnv})
+    global = spawnSync(PathToGlobal, opt, {cwd:cwd, env:GtagsEnv})
     # console.log global
     if global.error?
       status = {'error': {'title': "[Gtags] global not found", 'detail': global.error.toString()}}
@@ -157,9 +156,7 @@ class GtagsSymbols
     cmdPath = BuildCmdByOptions[options]
     spawn = require("child_process").spawn
 
-    gtagsEnv = process.env
-    gtagsEnv['PATH'] = PathEnv
-    cmd = spawn(cmdPath, cmdOpt, {cwd:path, env:gtagsEnv})
+    cmd = spawn(cmdPath, cmdOpt, {cwd:path, env:GtagsEnv})
 
     cmd.stdout.on 'data', (data) ->
       console.log data.toString()
@@ -188,6 +185,13 @@ class GtagsSymbols
       if packageRoot.indexOf(resourcePath) is 0
         packageRoot = Path.join("#{resourcePath}.unpacked", 'node_modules', 'gtags')
     packageRoot
+
+  clone: (obj) ->
+    return obj  if obj is null or typeof (obj) isnt "object"
+    temp = new obj.constructor()
+    for key of obj
+      temp[key] = @clone(obj[key])
+    temp
 
   _version: () ->
     options = "--sqlite3"
