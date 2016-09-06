@@ -3,3 +3,6 @@
 
 ## 0.4.1 - Bug Fix
 * Fix bug of update tags not working
+
+## 0.4.2 - Bug Fix
+* Fix bug of changing PATH env
