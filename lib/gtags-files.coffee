@@ -24,8 +24,8 @@ class GtagsFiles
 
   @open: (path, line) ->
     GtagsFiles.keepOpened.push path
-    #atom.workspace.open(path,{activatePane:true}).done =>
-    #  GtagsFiles.moveToLine(line)
+    atom.workspace.open(path,{activatePane:true}).done =>
+      GtagsFiles.moveToLine(line)
     GtagsFiles.clear()
 
   @clear: ->

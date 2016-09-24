@@ -15,6 +15,7 @@ class GtagsSymbolsView extends SelectListView
     @filterKey = null
     @prePath = ""
     @prePosition = null
+    @isConfirmed = false
 
   viewForItem: (item) ->
     GtagsNavigation.lock()
@@ -43,7 +44,9 @@ class GtagsSymbolsView extends SelectListView
       GtagsNavigation.unlock()
       GtagsNavigation.add(@prePath, @prePosition['row'] + 1, "")
       GtagsNavigation.add(item['path'], item['line'], "")
-      GtagsFiles.open(item['path'], item['line'], 1)
+      GtagsFiles.open(item['path'], item['line'])
+
+    @isConfirmed = true
     @cancel()
 
   selectItemView: (view) ->
@@ -62,6 +65,8 @@ class GtagsSymbolsView extends SelectListView
   cancel: ->
     @panel.hide()
     @setItems("")
+    if not @isConfirmed
+      GtagsFiles.open(@prePath, 0)
     GtagsFiles.clear()
     #console.log("cancel")
     super
@@ -90,6 +95,7 @@ class GtagsSymbolsView extends SelectListView
 
   show: ->
     @panel.show()
+    @isConfirmed = false
     @focusFilterEditor()
     if textEditor = atom.workspace.getActiveTextEditor()
       # add pre path
