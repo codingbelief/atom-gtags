@@ -148,8 +148,10 @@ module.exports = AtomGtags =
     @gtagsLookupView.setPath(path)
     @gtagsLookupView.onConfirmed (item) =>
       {symbols, status} = @gtagsSymbols.getDefinitions(item['symbol'], @gtagsLookupView.getPath())
-      @gtagsSymbolsView.setItems(symbols)
-      @gtagsSymbolsView.show()
+      showSymbolsViewCallback = =>
+        @gtagsSymbolsView.setItems(symbols)
+        @gtagsSymbolsView.show()
+      setTimeout(showSymbolsViewCallback, 200)
       console.log "onConfirmedCallBack"
     @gtagsLookupView.show()
 
