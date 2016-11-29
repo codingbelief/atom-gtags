@@ -1,7 +1,7 @@
 {
   "name": "atom-gtags",
   "main": "./lib/main",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Atom Gtags",
   "keywords": [
     "gtags",
