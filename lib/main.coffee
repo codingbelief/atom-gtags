@@ -21,6 +21,10 @@ module.exports = AtomGtags =
       type: 'boolean'
       default: true
 
+    useRelativePath:
+      type: 'boolean'
+      default: true
+
   provider: null
   gtagsListView: null
   modalPanel: null
