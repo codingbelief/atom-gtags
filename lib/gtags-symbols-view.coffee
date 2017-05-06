@@ -37,8 +37,10 @@ class GtagsSymbolsView extends SelectListView
 
   confirmed: (item) ->
 
+    @isConfirmed = true
     if item['title']?
       console.log "===>>> title selected"
+      @cancel()
     else
       console.log("===>>> #{item['path']}:#{item['line']} was selected")
       GtagsNavigation.unlock()
@@ -46,8 +48,6 @@ class GtagsSymbolsView extends SelectListView
       GtagsNavigation.add(item['path'], item['line'], "")
       GtagsFiles.open(item['path'], item['line'])
 
-    @isConfirmed = true
-    @cancel()
 
   selectItemView: (view) ->
       super
