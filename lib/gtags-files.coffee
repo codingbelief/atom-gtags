@@ -19,12 +19,12 @@ class GtagsFiles
       # console.log "keep #{path}"
       GtagsFiles.keepOpened.push path
 
-    atom.workspace.open(path,{activatePane:false}).done =>
+    atom.workspace.open(path,{activatePane:false}).then =>
       GtagsFiles.moveToLine(line)
 
   @open: (path, line) ->
     GtagsFiles.keepOpened.push path
-    atom.workspace.open(path,{activatePane:true}).done =>
+    atom.workspace.open(path,{activatePane:true}).then =>
       GtagsFiles.moveToLine(line)
     GtagsFiles.clear()
 

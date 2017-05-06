@@ -78,7 +78,7 @@ class GtagsSymbolsView extends SelectListView
       @prePath = textEditor.getPath()
       @prePosition = textEditor.getCursorBufferPosition()
       GtagsNavigation.add(@prePath, @prePosition['row']+1, "")
-    atom.workspace.open(path).done => @moveToLine(line)
+    atom.workspace.open(path).then => @moveToLine(line)
     # add new path
     GtagsNavigation.add(path, line, "")
 
