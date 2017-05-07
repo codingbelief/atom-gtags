@@ -1,6 +1,7 @@
 
 Path = require 'path'
 fs = require 'fs'
+extend = require('util')._extend
 PathToGtags = ""
 PathToGlobal = ""
 GtagsEnv = null
@@ -23,7 +24,7 @@ class GtagsSymbols
       packageRoot  = @getPackageRoot()
       PathToGtags  = Path.join(packageRoot, 'vendor', "#{process.platform}", "gtags")
       PathToGlobal = Path.join(packageRoot, 'vendor', "#{process.platform}", "global")
-      GtagsEnv = @clone(process.env)
+      GtagsEnv = extend({}, process.env)
       GtagsEnv['PATH'] = Path.join(packageRoot, 'vendor', "#{process.platform}")
       BuildCmdByOptions["--update"] = PathToGlobal
       BuildCmdByOptions["--sqlite3"] = PathToGtags
