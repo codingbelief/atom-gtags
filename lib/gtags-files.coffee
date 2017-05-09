@@ -2,18 +2,26 @@
 module.exports =
 class GtagsFiles
   @subscription: null
+  @preivew_counter: 0
   @events: []
   @paths: []
   @keepOpened: []
 
   @preview: (path, line, keepOpened=0) ->
-    GtagsFiles.subscription = atom.workspace.onDidOpen (event) =>
-      if event?['uri'] not in @paths
-        # console.log "push"
-        # console.log event
-        GtagsFiles.events.push event
-        GtagsFiles.paths.push event['uri']
-      GtagsFiles.subscription.dispose()
+    if(GtagsFiles.subscription==null)
+      @preivew_counter = 1
+      GtagsFiles.subscription = atom.workspace.onDidOpen (event) =>
+        if event?['uri'] not in @paths
+          # console.log "push"
+          # console.log event
+          GtagsFiles.events.push event
+          GtagsFiles.paths.push event['uri']
+        @preivew_counter -= 1
+        return if @preivew_counter > 0
+        GtagsFiles.subscription.dispose()
+        GtagsFiles.subscription = null
+    else
+      @preivew_counter += 1
 
     if keepOpened is 1
       # console.log "keep #{path}"
