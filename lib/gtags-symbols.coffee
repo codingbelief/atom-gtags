@@ -132,7 +132,7 @@ class GtagsSymbols
     re = /([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+(.*)/
     for symbol in symbols
       s = re.exec(symbol)
-      result.push({"symbol":s[1], "line":s[2], "path":Path.normalize(s[3]), "signature":s[4]})
+      result.push({"symbol":s[1], "line":s[2], "path":Path.normalize(s[3]), "signature":s[4], "relative_path":Path.relative(cwd,s[3])})
 
     result.splice 0,0,
       "options":"#{options}"
