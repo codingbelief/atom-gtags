@@ -29,8 +29,7 @@ class GtagsSymbolsView extends SelectListView
           @div "Project: #{item['project']}", class: 'secondary-line'
         else
           @div "#{item['signature']}", class: 'primary-line'
-          item_path = if atom.config.get('atom-gtags.useRelativePath') then item['relative_path'] else item['path']
-          @div "#{Path.basename(item['path'])} @ #{item_path}: #{item['line']}", class: 'secondary-line'
+          @div "#{Path.basename(item['path'])} @ #{item['path']}: #{item['line']}", class: 'secondary-line'
 
   getFilterKey: ->
     # console.log "getFilterKey: #{@filterKey}"

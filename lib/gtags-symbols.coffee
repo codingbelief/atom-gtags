@@ -9,10 +9,10 @@ GtagsEnv = null
 BuildCmdByOptions = {}
 
 FilterKeyByOptions =
-  "-x": "path"
-  "-xr": "path"
-  "-xf": "symbol"
-  "-xc": "symbol"
+  "-ax": "path"
+  "-axr": "path"
+  "-axf": "symbol"
+  "-axc": "symbol"
 
 
 module.exports =
@@ -31,13 +31,13 @@ class GtagsSymbols
 
   # Public
   getDefinitions: (symbolName, symbolFile="") ->
-    return @gtagsCommand("-x", symbolName)
+    return @gtagsCommand("-ax", symbolName)
 
   getReferences: (symbolName, symbolFile="") ->
-    return @_gtagsCommand("-xr", symbolName, Path.dirname(symbolFile))
+    return @_gtagsCommand("-axr", symbolName, Path.dirname(symbolFile))
 
   getSymbolsOfFile: (path) ->
-    return @_gtagsCommand("-xf", path, Path.dirname(path))
+    return @_gtagsCommand("-axf", path, Path.dirname(path))
 
   singleFileUpdate: (path) ->
     {symbols, status} = @_gtagsCommand("-p", "", Path.dirname(path))
@@ -53,7 +53,7 @@ class GtagsSymbols
       return {'symbols': {}, 'status': {}}
 
   getCompletions: (prefix) ->
-    return @gtagsCommand("-xc", prefix)
+    return @gtagsCommand("-axc", prefix)
 
   buildTags: (path, onCompleted=null) ->
     return @_buildTags("build", path, onCompleted)
@@ -93,10 +93,6 @@ class GtagsSymbols
       if @hasTagsFile(path)
         {symbols, status} = @_gtagsCommand(options, arg, path)
         if symbols?.length > 0
-          for sym in symbols
-            relative_path = sym['path']
-            sym['path'] = "#{path}/#{relative_path}"
-            sym['relative_path'] = relative_path
           syms.push(symbols...)
           stas = status
           console.log symbols
@@ -128,7 +124,7 @@ class GtagsSymbols
 
     symbols = global.stdout.toString().match(/[^\r\n]+/g)
     console.log symbols
-    if options is "-xc"
+    if options is "-axc"
       for s in symbols
         result.push({"symbol":s})
       return {'symbols': result, 'status': {}}
