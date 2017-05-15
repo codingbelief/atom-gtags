@@ -140,7 +140,7 @@ class GtagsNavigation
       return GtagsNavigation.curIndex[id]
 
   @openPath: (path, position, id=1) ->
-    atom.workspace.open(path).done => GtagsNavigation.moveToLine(position, id)
+    atom.workspace.open(path).then => GtagsNavigation.moveToLine(position, id)
       #console.log GtagsNavigation.trace
 
   @moveToLine: (position, id) ->

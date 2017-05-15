@@ -1,6 +1,7 @@
 
 Path = require 'path'
 fs = require 'fs'
+extend = require('util')._extend
 PathToGtags = ""
 PathToGlobal = ""
 GtagsEnv = null
@@ -8,10 +9,10 @@ GtagsEnv = null
 BuildCmdByOptions = {}
 
 FilterKeyByOptions =
-  "-ax": "path"
-  "-axr": "path"
-  "-axf": "symbol"
-  "-axc": "symbol"
+  "-x": "path"
+  "-xr": "path"
+  "-xf": "symbol"
+  "-xc": "symbol"
 
 
 module.exports =
@@ -23,20 +24,20 @@ class GtagsSymbols
       packageRoot  = @getPackageRoot()
       PathToGtags  = Path.join(packageRoot, 'vendor', "#{process.platform}", "gtags")
       PathToGlobal = Path.join(packageRoot, 'vendor', "#{process.platform}", "global")
-      GtagsEnv = @clone(process.env)
+      GtagsEnv = extend({}, process.env)
       GtagsEnv['PATH'] = Path.join(packageRoot, 'vendor', "#{process.platform}")
       BuildCmdByOptions["--update"] = PathToGlobal
       BuildCmdByOptions["--sqlite3"] = PathToGtags
 
   # Public
   getDefinitions: (symbolName, symbolFile="") ->
-    return @gtagsCommand("-ax", symbolName)
+    return @gtagsCommand("-x", symbolName)
 
   getReferences: (symbolName, symbolFile="") ->
-    return @_gtagsCommand("-axr", symbolName, Path.dirname(symbolFile))
+    return @_gtagsCommand("-xr", symbolName, Path.dirname(symbolFile))
 
   getSymbolsOfFile: (path) ->
-    return @_gtagsCommand("-axf", path, Path.dirname(path))
+    return @_gtagsCommand("-xf", path, Path.dirname(path))
 
   singleFileUpdate: (path) ->
     {symbols, status} = @_gtagsCommand("-p", "", Path.dirname(path))
@@ -52,7 +53,7 @@ class GtagsSymbols
       return {'symbols': {}, 'status': {}}
 
   getCompletions: (prefix) ->
-    return @gtagsCommand("-axc", prefix)
+    return @gtagsCommand("-xc", prefix)
 
   buildTags: (path, onCompleted=null) ->
     return @_buildTags("build", path, onCompleted)
@@ -92,6 +93,10 @@ class GtagsSymbols
       if @hasTagsFile(path)
         {symbols, status} = @_gtagsCommand(options, arg, path)
         if symbols?.length > 0
+          for sym in symbols
+            relative_path = sym['path']
+            sym['path'] = "#{path}/#{relative_path}"
+            sym['relative_path'] = relative_path
           syms.push(symbols...)
           stas = status
           console.log symbols
@@ -123,7 +128,7 @@ class GtagsSymbols
 
     symbols = global.stdout.toString().match(/[^\r\n]+/g)
     console.log symbols
-    if options is "-axc"
+    if options is "-xc"
       for s in symbols
         result.push({"symbol":s})
       return {'symbols': result, 'status': {}}

@@ -29,7 +29,8 @@ class GtagsSymbolsView extends SelectListView
           @div "Project: #{item['project']}", class: 'secondary-line'
         else
           @div "#{item['signature']}", class: 'primary-line'
-          @div "#{Path.basename(item['path'])} @ #{item['path']}: #{item['line']}", class: 'secondary-line'
+          item_path = if atom.config.get('atom-gtags.useRelativePath') then item['relative_path'] else item['path']
+          @div "#{Path.basename(item['path'])} @ #{item_path}: #{item['line']}", class: 'secondary-line'
 
   getFilterKey: ->
     # console.log "getFilterKey: #{@filterKey}"
@@ -37,8 +38,10 @@ class GtagsSymbolsView extends SelectListView
 
   confirmed: (item) ->
 
+    @isConfirmed = true
     if item['title']?
       console.log "===>>> title selected"
+      @cancel()
     else
       console.log("===>>> #{item['path']}:#{item['line']} was selected")
       GtagsNavigation.unlock()
@@ -46,8 +49,6 @@ class GtagsSymbolsView extends SelectListView
       GtagsNavigation.add(item['path'], item['line'], "")
       GtagsFiles.open(item['path'], item['line'])
 
-    @isConfirmed = true
-    @cancel()
 
   selectItemView: (view) ->
       super
@@ -78,7 +79,7 @@ class GtagsSymbolsView extends SelectListView
       @prePath = textEditor.getPath()
       @prePosition = textEditor.getCursorBufferPosition()
       GtagsNavigation.add(@prePath, @prePosition['row']+1, "")
-    atom.workspace.open(path).done => @moveToLine(line)
+    atom.workspace.open(path).then => @moveToLine(line)
     # add new path
     GtagsNavigation.add(path, line, "")
 
