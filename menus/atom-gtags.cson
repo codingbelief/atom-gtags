@@ -8,7 +8,7 @@
   ]
 
   # provide 'Update Gtags' command on the root directorys' context menu
-  '.tree-view.full-menu .project-root > .header':
+  '.tree-view .full-menu .project-root > .header':
     [
       {label: 'Build GTags ', command:  'atom-gtags:build-tags'},
       {label: 'Update GTags ', command:  'atom-gtags:update-tags'},
